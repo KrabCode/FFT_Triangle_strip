@@ -21,14 +21,13 @@ public class MainApp extends PApplet{
     float[][] nextPlane;
     float[][] tempPlane;
 
+    //TODO hook these up to sliders
     int xDetail = 64;
     int yDetail = 128;
 
     float xScl = 6;
     float yScl = 6;
     float zScl = 24;
-
-    float maxFFTthisFrame = 0;
 
     public static void main(String[] args) {
         PApplet.main("MainApp");
@@ -64,8 +63,6 @@ public class MainApp extends PApplet{
         translate(-xDetail*xScl/2, -yDetail*yScl/2);
         drawPlane();
         popMatrix();
-//        println(maxFFTthisFrame);
-        maxFFTthisFrame = 0;
     }
 
     private void updatePlane() {
@@ -115,18 +112,5 @@ public class MainApp extends PApplet{
             }
             endShape();
         }
-    }
-
-
-    float mapX(float top){
-        float result = map(mouseX, 0, width, 0, top);
-        println("x:"+result);
-        return result;
-    }
-
-    float mapY(float top){
-        float result = map(mouseY, 0, height, 0, top);
-        println("y:"+result);
-        return result;
     }
 }
