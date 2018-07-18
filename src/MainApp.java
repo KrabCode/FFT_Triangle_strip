@@ -6,6 +6,7 @@ import ddf.minim.analysis.FFT;
 
 import peasy.*;
 import processing.core.PApplet;
+import processing.core.PImage;
 
 public class MainApp extends PApplet{
 
@@ -22,12 +23,14 @@ public class MainApp extends PApplet{
     float[][] tempPlane;
 
     //TODO hook these up to sliders
-    int xDetail = 64;
-    int yDetail = 128;
+    int xDetail = 6;
+    int yDetail = 32;
 
-    float xScl = 8;
-    float yScl = 12;
+    float xScl = 80;
+    float yScl = 120;
     float zScl = 32;
+    PImage img;
+
     public static void main(String[] args) {
         PApplet.main("MainApp");
     }
@@ -39,6 +42,7 @@ public class MainApp extends PApplet{
 
     public void setup() {
         colorMode(HSB);
+        img = loadImage("crop.png");
         fx = new PostFX(this);
         m = new Minim(this);
         in = m.getLineIn();
@@ -90,14 +94,15 @@ public class MainApp extends PApplet{
 //        float ySide = (yDetail-1)*yScl;
 //        quad(0,0,xSide, 0, xSide,ySide, 0, ySide);
 
-        for(int y = 0; y < yDetail-1; y++) {
+        for(float y = 0; y < yDetail-1; y++) {
             beginShape(TRIANGLE_STRIP);
-            for(int x = 0; x < xDetail; x++){
+//            texture(img);
+            for(float x = 0; x < xDetail; x++){
 
-                float z0 = plane[x][y];
-                float z1 = plane[x][y+1];
+                float z0 = plane[round(x)][round(y)];
+                float z1 = plane[round(x)][round(y+1)];
 
-                float hue = map(z0, -10, 5,0,255);
+                float hue = map(max(z0, z1), -10, 5,0,255);
 
                 if(x == 0){
                     strokeWeight(5);
@@ -106,7 +111,13 @@ public class MainApp extends PApplet{
                     strokeWeight(1);
                     stroke((hue)%255, 255,200);
                 }
-                vertex(x*xScl,y*yScl, z0*zScl);
+
+//                noStroke();
+//                float u = x/yDetail/12;
+//                float v = y/yDetail/12;
+//                println(u + " : " + v);
+
+                vertex(x*xScl,y*yScl,      z0*zScl);
                 vertex(x*xScl,y*yScl+yScl, z1*zScl);
             }
             endShape();
