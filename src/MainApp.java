@@ -25,10 +25,9 @@ public class MainApp extends PApplet{
     int xDetail = 64;
     int yDetail = 128;
 
-    float xScl = 6;
-    float yScl = 6;
-    float zScl = 24;
-
+    float xScl = 8;
+    float yScl = 12;
+    float zScl = 32;
     public static void main(String[] args) {
         PApplet.main("MainApp");
     }
@@ -87,9 +86,9 @@ public class MainApp extends PApplet{
         stroke(255);
         noFill();
 
-        float xSide = xDetail*xScl;
-        float ySide = (yDetail-1)*yScl;
-        quad(0,0,xSide, 0, xSide,ySide, 0, ySide);
+//        float xSide = xDetail*xScl;
+//        float ySide = (yDetail-1)*yScl;
+//        quad(0,0,xSide, 0, xSide,ySide, 0, ySide);
 
         for(int y = 0; y < yDetail-1; y++) {
             beginShape(TRIANGLE_STRIP);
@@ -102,10 +101,10 @@ public class MainApp extends PApplet{
 
                 if(x == 0){
                     strokeWeight(5);
-                    stroke((hue)%255, 120,255);
+                    stroke((hue)%255, 255,255);
                 }else{
                     strokeWeight(1);
-                    stroke((hue)%255, 255,220);
+                    stroke((hue)%255, 255,200);
                 }
                 vertex(x*xScl,y*yScl, z0*zScl);
                 vertex(x*xScl,y*yScl+yScl, z1*zScl);
