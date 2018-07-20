@@ -23,8 +23,8 @@ public class MainApp extends PApplet{
     float[][] tempPlane;
 
     //TODO hook these up to sliders
-    int xDetail = 6;
-    int yDetail = 32;
+    int xDetail = 64;
+    int yDetail = 64;
 
     float xScl = 80;
     float yScl = 120;
@@ -42,7 +42,8 @@ public class MainApp extends PApplet{
 
     public void setup() {
         colorMode(HSB);
-        img = loadImage("crop.png");
+        textureMode(NORMAL);
+        img = loadImage("seamless_denim.jpg");
         fx = new PostFX(this);
         m = new Minim(this);
         in = m.getLineIn();
@@ -90,35 +91,34 @@ public class MainApp extends PApplet{
         stroke(255);
         noFill();
 
-//        float xSide = xDetail*xScl;
-//        float ySide = (yDetail-1)*yScl;
-//        quad(0,0,xSide, 0, xSide,ySide, 0, ySide);
-
         for(float y = 0; y < yDetail-1; y++) {
             beginShape(TRIANGLE_STRIP);
 //            texture(img);
             for(float x = 0; x < xDetail; x++){
 
-                float z0 = plane[round(x)][round(y)];
-                float z1 = plane[round(x)][round(y+1)];
+                float elevation0 = plane[round(x)][round(y)];
+                float elevation1 = plane[round(x)][round(y+1)];
 
-                float hue = map(max(z0, z1), -10, 5,0,255);
+                float hue = 20;//map(max(elevation0, elevation1), -10, 0,0,255);
+                stroke((hue)%255, 255,255);
 
-                if(x == 0){
-                    strokeWeight(5);
-                    stroke((hue)%255, 255,255);
-                }else{
-                    strokeWeight(1);
-                    stroke((hue)%255, 255,200);
-                }
+                float x0 = x*xScl;
+                float y0 = y*yScl;
+                float z0 = elevation0*zScl;
+                float x1 = x*xScl;
+                float y1 = y*yScl+yScl;
+                float z1 = elevation1*zScl;
 
-//                noStroke();
-//                float u = x/yDetail/12;
-//                float v = y/yDetail/12;
-//                println(u + " : " + v);
+                vertex(x0,y0,z0);
+                vertex(x1,y1,z1);
 
-                vertex(x*xScl,y*yScl,      z0*zScl);
-                vertex(x*xScl,y*yScl+yScl, z1*zScl);
+//                float u0 = map(x0, 0, xDetail*xScl, 0, 1);
+//                float v0 = map(y0, 0, yDetail*yScl, 0, 1);
+//                float u1 = map(x1, 0, xDetail*xScl, 0, 1);
+//                float v1 = map(y1, 0, yDetail*yScl, 0, 1);
+
+//                vertex(x0,y0,z0, u0, v0);
+//                vertex(x1,y1,z1, u1, v1);
             }
             endShape();
         }
