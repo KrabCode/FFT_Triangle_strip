@@ -99,8 +99,9 @@ public class MainApp extends PApplet{
                 float elevation0 = plane[round(x)][round(y)];
                 float elevation1 = plane[round(x)][round(y+1)];
 
-                float hue = 20;//map(max(elevation0, elevation1), -10, 0,0,255);
+                float hue = map(max(elevation0, elevation1), -10, 0,0,255);
                 stroke((hue)%255, 255,255);
+                strokeWeight(map(x, 0, xDetail, 3, 0));
 
                 float x0 = x*xScl;
                 float y0 = y*yScl;
