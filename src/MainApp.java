@@ -26,9 +26,9 @@ public class MainApp extends PApplet{
     int xDetail = 64;
     int yDetail = 64;
 
-    float xScl = 80;
-    float yScl = 120;
-    float zScl = 32;
+    float xScl = 8;
+    float yScl = 16;
+    float zScl = 6;
     PImage img;
 
     public static void main(String[] args) {
@@ -62,7 +62,7 @@ public class MainApp extends PApplet{
         background(0);
         updatePlane();
         pushMatrix();
-//        rotateX(HALF_PI-QUARTER_PI/2);
+        rotateX(HALF_PI-QUARTER_PI/2);
         rotateZ(HALF_PI);
         translate(-xDetail*xScl/2, -yDetail*yScl/2);
         drawPlane();
@@ -73,9 +73,7 @@ public class MainApp extends PApplet{
         for(int y = 0; y < yDetail; y++) {
             for(int x = 0; x < xDetail; x++){
                 if(x == 0){
-                    int myBand = round(map(abs(yDetail/2-y), 0, yDetail/2, 0, fft.avgSize()-1));
-                    float myFft = 2*log( 200 * fft.getAvg(myBand) / fft.timeSize() );
-                    nextPlane[x][y] = myFft;
+                    nextPlane[x][y] = getFFT(y);
                 }else{
                     nextPlane[x][y] = plane[x-1][y];
                 }
@@ -84,6 +82,11 @@ public class MainApp extends PApplet{
         tempPlane = plane;
         plane = nextPlane;
         nextPlane = tempPlane;
+    }
+
+    float getFFT(int i){
+        int myBand = round(map(abs(yDetail/2-i), 0, yDetail/2, 0, fft.avgSize()-1));
+        return 2*log( 200 * fft.getAvg(myBand) / fft.timeSize() );
     }
 
 
@@ -99,9 +102,10 @@ public class MainApp extends PApplet{
                 float elevation0 = plane[round(x)][round(y)];
                 float elevation1 = plane[round(x)][round(y+1)];
 
-                float hue = map(max(elevation0, elevation1), -10, 0,0,255);
-                stroke((hue)%255, 255,255);
-                strokeWeight(map(x, 0, xDetail, 3, 0));
+                float hue = map(max(elevation0, elevation1), -10, 0,150,255);
+                float b = map(x, 0, xDetail, 0, 255);
+                stroke(hue, 255,255-b);
+//                strokeWeight(x==0?3:map(x, 0, xDetail, 2, 0));
 
                 float x0 = x*xScl;
                 float y0 = y*yScl;
@@ -112,14 +116,6 @@ public class MainApp extends PApplet{
 
                 vertex(x0,y0,z0);
                 vertex(x1,y1,z1);
-
-//                float u0 = map(x0, 0, xDetail*xScl, 0, 1);
-//                float v0 = map(y0, 0, yDetail*yScl, 0, 1);
-//                float u1 = map(x1, 0, xDetail*xScl, 0, 1);
-//                float v1 = map(y1, 0, yDetail*yScl, 0, 1);
-
-//                vertex(x0,y0,z0, u0, v0);
-//                vertex(x1,y1,z1, u1, v1);
             }
             endShape();
         }
